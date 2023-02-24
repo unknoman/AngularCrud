@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class PersonaService {
 
-  constructor(private http:HttpClient) { } // test
+  constructor(private http:HttpClient) { } 
 
  url:string = "https://localhost:7196/";
 
