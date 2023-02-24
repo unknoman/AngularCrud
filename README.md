@@ -26,8 +26,8 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
-##Informacion Extra 
-##Funcionalidades
+## Informacion Extra 
+## Funcionalidades
 Crear, Leer, Actualizar y Borrar registros utilizando la API de .net y entityframework creada anteriormente.
 Mostrar los registros existentes y la información relacionada a través de la interfaz de usuario de Angular.
 Estado Actual
