@@ -18,6 +18,7 @@ export class PersonaService {
    let direccion = this.url +'usuario/listar';
    return this.http.get<UsuarioInterface[]>(direccion);
   }
+  
 }
 
 
