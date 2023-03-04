@@ -30,5 +30,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Funcionalidades
 Crear, Leer, Actualizar y Borrar registros utilizando la API de .net y entityframework creada anteriormente.
 Mostrar los registros existentes y la información relacionada a través de la interfaz de usuario de Angular.
-Estado Actual
+## Estado Actual
 Actualmente, el CRUD no está completamente terminado, pero se encuentra en proceso de desarrollo, se están trabajando las funcionalidades .
