@@ -19,7 +19,6 @@ export class PersonaComponent implements OnInit{
 
   ngOnInit(): void {
     this.getUserAll();
-    this.getRolesAll();
   }
 
 
@@ -31,12 +30,6 @@ export class PersonaComponent implements OnInit{
 
   }
 
-  public getRolesAll() // getRolesAll
-  {
-    this.rolesList.getRolAll().subscribe(respuesta => {
-      this.roles = respuesta;
-    })
-  }
 
 
 }
