@@ -7,7 +7,7 @@ import { PersonasComponent } from './listas/personas/personas.component';
 import { RolesComponent } from './listas/roles/roles.component';
 import { PersonaComponent } from './listas/persona/persona.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ModificarUsuarioComponent } from './modales/modificar-usuario/modificar-usuario.component';
+//import { ModificarUsuarioComponent } from './modales/modificar-usuario/modificar-usuario.component';
 import { DashboardComponent } from './utilidades/dashboard/dashboard.component';
 
 @NgModule({
@@ -15,7 +15,6 @@ import { DashboardComponent } from './utilidades/dashboard/dashboard.component';
     AppComponent,
     routingComponents,
     PersonaComponent,
-    ModificarUsuarioComponent,
     DashboardComponent
   ],
   imports: [

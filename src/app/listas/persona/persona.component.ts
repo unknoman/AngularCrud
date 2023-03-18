@@ -27,8 +27,22 @@ export class PersonaComponent implements OnInit{
     this.usuariolist.getUserAll().subscribe(respuesta => {
       this.usuarios = respuesta;
     });
-
   }
+
+  public eliminarUsuario(usuario:UsuarioInterface){
+     this.usuariolist.eliminarUsuario(usuario);
+}
+
+public modificarUsuario(Persona: UsuarioInterface)
+{
+this.usuariolist.modificarUsuario(Persona);
+}
+
+
+public crearUsuario()
+{
+this.usuariolist.crearUsuario();
+}
 
 
 
