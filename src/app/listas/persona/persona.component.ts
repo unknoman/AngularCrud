@@ -5,6 +5,7 @@ import { IdtipoNavigation } from 'src/app/modelos/roles.interface';
 import { RolesService } from 'src/app/servicios/roles/roles.service';
 import { NotificacionesService } from 'src/app/sweetalert/notificaciones.service';
 import Swal from 'sweetalert2';
+import { personaCrear } from 'src/app/modelos/personaCrear.interface';
 
 @Component({
   selector: 'app-persona',
@@ -77,10 +78,57 @@ this.usuariolist.modificarUsuario(Persona);
 }
 
 
-public crearUsuario()
-{
-this.usuariolist.crearUsuario();
-}
+
+  async crearUsuario() {
+    let roles: IdtipoNavigation[] = [];
+    this.rolesList.getRolAll().subscribe(rol => {
+      roles = rol;
+      Swal.fire({
+        title: 'Crear Usuario',
+        html: '<input id="swal-input1" class="swal2-input" placeholder="Usuario">' +
+        '<input id="swal-input2" class="swal2-input" placeholder="Contraseña">' +
+        '<select id="swal-select1" class="swal2-input">' +
+        '<option value="">Seleccionar rol</option>' +
+        roles.map((rol : IdtipoNavigation) => '<option value="' + rol.idtipo + '">' + rol.tipo + '</option>') +
+        '</select>',
+        focusConfirm: false,
+        preConfirm: () => {
+          const usuario = new personaCrear();
+           usuario.usuario1 = (document.getElementById('swal-input1') as HTMLInputElement).value;
+          usuario.password = (document.getElementById('swal-input2') as HTMLInputElement).value;
+          usuario.idtipo = parseInt((document.getElementById('swal-select1') as HTMLSelectElement).value);
+          if (!usuario) {
+            Swal.showValidationMessage('Por favor, complete todos los campos');
+          }
+          return { usuario };
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log(result.value);
+          // hacer la petición con los datos del usuario
+          if(result?.value?.usuario) // es para comprobar si result no es undefined
+          {
+           this.usuariolist.crearUsuario(result.value.usuario).then(respuesta => 
+            {
+              if(respuesta == true)
+              {
+                this.notificaciones.OperacionCorrecta();
+                this.getUserAll();
+              }
+            }
+            ); // se pasa el objeto usuario del sweetAlert
+           
+          }
+
+        }
+      });
+    });
+  }
+
+
+
+
+
 
 
 

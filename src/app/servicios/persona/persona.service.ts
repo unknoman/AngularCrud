@@ -5,6 +5,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { firstValueFrom, Observable } from 'rxjs';
 import { environment } from 'src/environment';
 import { IdtipoNavigation } from 'src/app/modelos/roles.interface';
+import { personaCrear } from 'src/app/modelos/personaCrear.interface';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -64,37 +65,15 @@ export class PersonaService {
 
   roles: IdtipoNavigation[] = [];
 
-  async crearUsuario() {
-    let roles: IdtipoNavigation[] = [];
-    this.rolService.getRolAll().subscribe(rol => {
-      roles = rol;
-      Swal.fire({
-        title: 'Crear Usuario',
-        html: '<input id="swal-input1" class="swal2-input" placeholder="Usuario">' +
-        '<input id="swal-input2" class="swal2-input" placeholder="Contraseña">' +
-        '<select id="swal-select1" class="swal2-input">' +
-        '<option value="">Seleccionar rol</option>' +
-        roles.map((rol : IdtipoNavigation) => '<option value="' + rol.idtipo + '">' + rol.tipo + '</option>') +
-        '</select>',
-        focusConfirm: false,
-        preConfirm: () => {
-          const usuario = new UsuarioInterface();
-           usuario.usuario1 = (document.getElementById('swal-input1') as HTMLInputElement).value;
-          usuario.password = (document.getElementById('swal-input2') as HTMLInputElement).value;
-          const rol = (document.getElementById('swal-select1') as HTMLSelectElement).value;
-          if (!usuario.usuario1 || !usuario.password || !rol) {
-            Swal.showValidationMessage('Por favor, complete todos los campos');
-          }
-          return { usuario, rol };
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          console.log(result.value);
-          // hacer la petición con los datos del usuario
-        }
-      });
-    });
-  }
+ async crearUsuario(PersonaCrear: personaCrear): Promise<boolean>{
+  let direccion = this.url +'usuario/crear';
+  const respuesta = await firstValueFrom(this.http.post(direccion, PersonaCrear));
+  console.log(respuesta);
+   if(respuesta == true)
+    return true;
+   else
+   return false;
+ }
 
 } 
 
