@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {UsuarioInterface} from '../../modelos/persona.interface';
 import { RolesService } from '../roles/roles.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { environment } from 'src/environment';
 import { IdtipoNavigation } from 'src/app/modelos/roles.interface';
 import Swal from 'sweetalert2';
@@ -20,6 +20,7 @@ export class PersonaService {
 
   getUserAll():Observable<UsuarioInterface[]>{
    let direccion = this.url +'usuario/listar';
+   const options = { cache: 'no-cache' };
    return this.http.get<UsuarioInterface[]>(direccion);
   }
 
@@ -45,27 +46,21 @@ export class PersonaService {
       }
     });
   }
-
-  async eliminarUsuario(Persona: UsuarioInterface){
-    await Swal.fire({
-      title: 'Estas seguro que desea borrar al usuario ' + Persona.usuario1 + '?',
-      text: "Esta acción no se podra revertir!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, Borrar!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // peticion eliminar usuario
-        Swal.fire(
-          'Borrado!',
-          'El usuario fue eliminado.',
-          'success'
-        )
-      }
-    })
-  }
+  async eliminarUsuario(Persona: UsuarioInterface): Promise<boolean> {
+   let direccion = this.url +'usuario/borrar/?id=' + Persona.idusuario;
+   try
+   {
+    const respuesta = await firstValueFrom(this.http.delete(direccion));
+    if(respuesta == true)
+      return true
+     else 
+      return false;
+   } catch (error)
+   {
+         console.log(error);
+         return false;
+   }
+    }
 
   roles: IdtipoNavigation[] = [];
 
@@ -83,13 +78,14 @@ export class PersonaService {
         '</select>',
         focusConfirm: false,
         preConfirm: () => {
-          const usuario = (document.getElementById('swal-input1') as HTMLInputElement).value;
-          const contrasena = (document.getElementById('swal-input2') as HTMLInputElement).value;
+          const usuario = new UsuarioInterface();
+           usuario.usuario1 = (document.getElementById('swal-input1') as HTMLInputElement).value;
+          usuario.password = (document.getElementById('swal-input2') as HTMLInputElement).value;
           const rol = (document.getElementById('swal-select1') as HTMLSelectElement).value;
-          if (!usuario || !contrasena || !rol) {
+          if (!usuario.usuario1 || !usuario.password || !rol) {
             Swal.showValidationMessage('Por favor, complete todos los campos');
           }
-          return { usuario, contrasena, rol };
+          return { usuario, rol };
         },
       }).then((result) => {
         if (result.isConfirmed) {
