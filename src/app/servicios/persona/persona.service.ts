@@ -21,32 +21,19 @@ export class PersonaService {
 
   getUserAll():Observable<UsuarioInterface[]>{
    let direccion = this.url +'usuario/listar';
-   const options = { cache: 'no-cache' };
    return this.http.get<UsuarioInterface[]>(direccion);
   }
 
-  async modificarUsuario(Persona: UsuarioInterface)
+  async modificarUsuario(Persona: personaCrear) : Promise<boolean>
   {
-   await Swal.fire({
-      title: 'Modificar objeto',
-      html:
-        '<input id="swal-input1" class="swal2-input" value="' +
-        Persona.usuario1 +
-        '">' +
-        '<input id="swal-input2" class="swal2-input" value="' +
-        Persona.password +
-        '">',
-      focusConfirm: false,
-      preConfirm: () => {
-        Persona.usuario1 = (document.getElementById(
-          'swal-input1'
-        ) as HTMLInputElement).value;
-        Persona.password = (document.getElementById(
-          'swal-input2'
-        ) as HTMLInputElement).value;
-      }
-    });
+    let direccion = this.url +'usuario/actualizar';
+    const respuesta = await firstValueFrom(this.http.put(direccion, Persona));
+     if(respuesta == true)
+       return true;
+     else
+     return false;
   }
+
   async eliminarUsuario(Persona: UsuarioInterface): Promise<boolean> {
    let direccion = this.url +'usuario/borrar/?id=' + Persona.idusuario;
    try

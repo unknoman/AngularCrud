@@ -72,9 +72,57 @@ async eliminarUsuario(Persona: UsuarioInterface) {
 
 //-----------
 
-public modificarUsuario(Persona: UsuarioInterface)
+async modificarUsuario(Persona: UsuarioInterface)
 {
-this.usuariolist.modificarUsuario(Persona);
+  let roles: IdtipoNavigation[] = [];
+ const usuario = new personaCrear();
+ usuario.idusuario = Persona.idusuario;
+ usuario.usuario1 = Persona.usuario1;
+ usuario.password = Persona.password;
+  this.rolesList.getRolAll().subscribe(rol => {
+    roles = rol;
+  Swal.fire({
+    title: 'Modificar Usuario: ' + usuario.usuario1,
+    html:
+      '<input id="swal-input1" class="swal2-input" value="' +
+      usuario.usuario1 +
+      '">' +
+      '<input id="swal-input2" class="swal2-input" value="' +
+      usuario.password +
+      '">'+ 
+      '<select id="swal-select1" class="swal2-input">' +
+      '<option value="">Seleccionar rol</option>' +
+      roles.map((rol : IdtipoNavigation) => '<option value="' + rol.idtipo + '">' + rol.tipo + '</option>') +
+      '</select>'
+      ,
+    focusConfirm: false,
+    preConfirm: () => {
+      usuario.usuario1 = (document.getElementById(
+        'swal-input1'
+      ) as HTMLInputElement).value;
+      usuario.password = (document.getElementById(
+        'swal-input2'
+      ) as HTMLInputElement).value;
+      usuario.idtipo = parseInt((document.getElementById('swal-select1') as HTMLInputElement).value);
+      return { usuario };
+      }
+  }).then((result) => {
+  if(result.isConfirmed)
+  {
+    if(result?.value?.usuario)
+    {
+      this.usuariolist.modificarUsuario(result.value.usuario).then(respuesta =>{
+        if(respuesta == true)
+        {
+          this.getUserAll();
+          this.notificaciones.OperacionCorrecta();
+        }
+      })
+    }
+  }
+  });
+})
+
 }
 
 
@@ -94,7 +142,7 @@ this.usuariolist.modificarUsuario(Persona);
         focusConfirm: false,
         preConfirm: () => {
           const usuario = new personaCrear();
-           usuario.usuario1 = (document.getElementById('swal-input1') as HTMLInputElement).value;
+          usuario.usuario1 = (document.getElementById('swal-input1') as HTMLInputElement).value;
           usuario.password = (document.getElementById('swal-input2') as HTMLInputElement).value;
           usuario.idtipo = parseInt((document.getElementById('swal-select1') as HTMLSelectElement).value);
           if (!usuario) {
